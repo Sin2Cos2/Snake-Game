@@ -11,6 +11,7 @@ public class GameField extends JPanel implements ActionListener {
     private final int DOT_SIZE = 32;
     private final int ALL_DOTS = 400;
     private int SCORE;
+    private JButton button;
     private Image dot;
     private Image apple;
     private int appleX;
@@ -19,11 +20,11 @@ public class GameField extends JPanel implements ActionListener {
     private int[] y = new int[ALL_DOTS];
     private int dots;
     private Timer timer;
-    private boolean right = true;
-    private boolean up = false;
-    private boolean down = false;
-    private boolean left = false;
-    private boolean inGame = true;
+    private boolean right;
+    private boolean up;
+    private boolean down;
+    private boolean left;
+    private boolean inGame;
 
 
     public GameField() {
@@ -35,6 +36,15 @@ public class GameField extends JPanel implements ActionListener {
     }
 
     public void initGame(){
+        inGame = true;
+        right = true;
+        up = false;
+        down = false;
+        left = false;
+
+        button = new JButton("Restart");
+        button.setBounds(245, 340, 160, 40);
+
         dots = 3;
         SCORE = 0;
         for (int i = 0; i < dots; i++){
@@ -56,7 +66,7 @@ public class GameField extends JPanel implements ActionListener {
             for (int i = 0; i < dots; i++) {
                 if(appleX != x[i] && appleY != y[i])
                     collision = false;
-                if(appleX < 0 || appleY < 0)
+                if(appleX < 0 || appleY < 0 + DOT_SIZE)
                     collision = true;
                 if(appleX > SIZE || appleY > SIZE)
                     collision = true;
@@ -91,6 +101,10 @@ public class GameField extends JPanel implements ActionListener {
             String finalScore = "Your score: " + SCORE;
             g.drawString(endGame, 250, 270);
             g.drawString(finalScore, 240, 310);
+
+            add(button);
+            button.addActionListener(this);
+            timer.stop();
         }
     }
 
@@ -142,6 +156,12 @@ public class GameField extends JPanel implements ActionListener {
             checkApple();
             checkCollisions();
             move();
+        } else
+        {
+            if(e.getSource() == button) {
+                remove(button);
+                initGame();
+            }
         }
         repaint();
     }
