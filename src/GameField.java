@@ -10,6 +10,7 @@ public class GameField extends JPanel implements ActionListener {
     private final int SIZE = 640;
     private final int DOT_SIZE = 32;
     private final int ALL_DOTS = 400;
+    private int SCORE;
     private Image dot;
     private Image apple;
     private int appleX;
@@ -35,6 +36,7 @@ public class GameField extends JPanel implements ActionListener {
 
     public void initGame(){
         dots = 3;
+        SCORE = 0;
         for (int i = 0; i < dots; i++){
             x[i] = 96 - i * DOT_SIZE;
             y[i] = 96;
@@ -72,17 +74,23 @@ public class GameField extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        Font f = new Font("Arial", Font.BOLD, 28);
+        g.setColor(Color.white);
+        g.setFont(f);
+
         if(inGame) {
+            String currentScore = "Score: " + SCORE;
             g.drawImage(apple, appleX, appleY, this);
             for (int i = 0; i < dots; i++) {
                 g.drawImage(dot, x[i], y[i], this);
             }
+            g.drawString(currentScore, 5, 30);
         } else {
             String endGame = "Game Over";
-            Font f = new Font("Arial", Font.BOLD, 28);
-            g.setColor(Color.white);
-            g.setFont(f);
+            String finalScore = "Your score: " + SCORE;
             g.drawString(endGame, 250, 270);
+            g.drawString(finalScore, 240, 310);
         }
     }
 
@@ -111,6 +119,7 @@ public class GameField extends JPanel implements ActionListener {
     public void checkApple(){
         if(x[0] == appleX && y[0] == appleY){
             dots++;
+            SCORE += 10;
             createApple();
         }
     }
